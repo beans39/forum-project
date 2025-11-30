@@ -1,0 +1,23 @@
+DROP TABLE IF EXISTS user;
+CREATE TABLE user (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username TEXT UNIQUE NOT NULL,
+    password TEXT NOT NULL,
+    is_admin BOOLEAN NOT NULL DEFAULT 0
+);
+
+DROP TABLE IF EXISTS thread;
+CREATE TABLE thread (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title TEXT NOT NULL,
+    description TEXT NOT NULL
+);
+
+DROP TABLE IF EXISTS post;
+CREATE TABLE post (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    thread_id INTEGER NOT NULL,
+    author TEXT NOT NULL,
+    content TEXT NOT NULL,
+    FOREIGN KEY(thread_id) REFERENCES thread(id)
+);

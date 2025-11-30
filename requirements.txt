@@ -3,3 +3,5 @@ Flask_SQLAlchemy
 Flask_Migrate
 gunicorn
 google-cloud-storage
+werkzeug
+pytz

@@ -1,14 +1,24 @@
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
+from flask import Flask, g
+import sqlite3
+from .routes import bp
 
-db = SQLAlchemy()
+DATABASE = 'forum.db'
+
+def get_db():
+    if 'db' not in g:
+        g.db = sqlite3.connect(DATABASE)
+        g.db.row_factory = sqlite3.Row
+    return g.db
+
+def close_db(e=None):
+    db = g.pop('db', None)
+    if db is not None:
+        db.close()
 
 def create_app():
     app = Flask(__name__)
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///../forum.db'
-    db.init_app(app)
-
-    from .routes import main
-    app.register_blueprint(main)
-
+    app.config['SECRET_KEY'] = 'dev'
+    app.register_blueprint(bp)
+    app.teardown_appcontext(close_db)
+    app.get_db = get_db
     return app

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}Forum{% endblock %}</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <nav>
+        <a href="/">Home</a>
+        <a href="/forums">Forums</a>
+        {% if session.user %}
+          <a href="{{ url_for('main.logout') }}">Logout ({{ session.user }})</a>
+        {% else %}
+          <a href="{{ url_for('main.login') }}">Login</a>
+        {% endif %}
+    </nav>
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>
