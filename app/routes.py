@@ -72,10 +72,10 @@ def thread(thread_id):
     error = None
 
     if request.method == 'POST':
-    author = request.form.get('author', 'Anonymous')
-    content = request.form.get('content', '')
-    image = request.files.get('image')
-    image_path = thumb_path = None
+        author = request.form.get('author', 'Anonymous')
+        content = request.form.get('content', '')
+        image = request.files.get('image')
+        image_path = thumb_path = None
 
     if image and allowed_file(image.filename):
         filename = secure_filename(f"{datetime.utcnow().strftime('%Y%m%d%H%M%S')}_{image.filename}")
