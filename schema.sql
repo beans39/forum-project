@@ -10,7 +10,10 @@ DROP TABLE IF EXISTS thread;
 CREATE TABLE thread (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     title TEXT NOT NULL,
-    description TEXT NOT NULL
+    description TEXT NOT NULL,
+    category TEXT NOT NULL,
+    created_at TEXT,
+    is_sticky INTEGER DEFAULT 0
 );
 
 DROP TABLE IF EXISTS post;
@@ -19,5 +22,8 @@ CREATE TABLE post (
     thread_id INTEGER NOT NULL,
     author TEXT NOT NULL,
     content TEXT NOT NULL,
+    image_path TEXT,
+    thumb_path TEXT,
+    created_at TEXT,
     FOREIGN KEY(thread_id) REFERENCES thread(id)
 );

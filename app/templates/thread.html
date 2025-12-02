@@ -1,28 +1,55 @@
 {% extends "base.html" %}
 {% block content %}
 <h1>{{ forum.title }}</h1>
-<p>{{ forum.desc }}</p>
+<p><em>{{ forum.description }}</em></p>
 <hr>
-<ul>
-  {% for post in posts %}
-    <li><strong>{{ post.author }}</strong>: {{ post.content }}</li>
+{% if session.is_admin %}
+  {% if forum.is_sticky %}
+    <form method="post" action="{{ url_for('main.unsticky_thread', thread_id=forum.id) }}" style="display:inline;">
+      <button type="submit" style="background:#B8D870;color:#222;">Unpin Thread</button>
+    </form>
+    <span style="color:green;font-weight:bold;margin-left:6px;">[Pinned]</span>
   {% else %}
-    <li>No posts yet.</li>
-  {% endfor %}
-</ul>
+    <form method="post" action="{{ url_for('main.sticky_thread', thread_id=forum.id) }}" style="display:inline;">
+      <button type="submit" style="background:#1c9c22;">Pin Thread</button>
+    </form>
+  {% endif %}
+{% endif %}
+
+<!-- Post list -->
+{% for post in posts %}
+  <div class="post">
+    {% if session.is_admin %}
+      <a href="{{ url_for('main.edit_post', post_id=post.id, thread_id=forum.id) }}">[edit]</a>
+    {% endif %}
+    <strong>{{ post.author }}</strong>
+    <span class="post-number">No.{{ post.id }}</span>
+    <span style="color: #888; margin-left:10px;">{{ post.created_at }}</span>
+    {% if session.is_admin %}
+      <a href="{{ url_for('main.delete_post', post_id=post.id, thread_id=forum.id) }}"
+         style="color:red;" onclick="return confirm('Delete this post?')">[delete]</a>
+    {% endif %}
+    {% if post.image_path %}
+      <br>
+      <img src="{{ url_for('static', filename=post.image_path) }}" style="max-width:300px;max-height:300px;">
+    {% endif %}
+    <br>
+    {{ post.content }}
+  </div>
+{% else %}
+  <div class="info">No posts yet.</div>
+{% endfor %}
 
 <hr>
 <h2>Add a new post:</h2>
-<form method="post">
+<form method="post" enctype="multipart/form-data">
   <input type="text" name="author" placeholder="Your name" value="Anonymous">
-  <br>
   <textarea name="content" placeholder="Type your message"></textarea>
-  <br>
+  <input type="file" name="image">
   <button type="submit">Post</button>
 </form>
 {% if error %}
-  <p style="color:red;">{{ error }}</p>
+  <div class="error">{{ error }}</div>
 {% endif %}
-
-<a href="/forums">Back to forums</a>
+<a href="{{ url_for('main.forums') }}">Back to forums</a>
 {% endblock %}

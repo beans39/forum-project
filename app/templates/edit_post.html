@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Edit Post</h1>
+<form method="post">
+  <textarea name="content">{{ post.content }}</textarea>
+  <button type="submit">Save Changes</button>
+</form>
+{% if error %}
+  <div class="error">{{ error }}</div>
+{% endif %}
+<a href="{{ url_for('main.thread', thread_id=thread_id) }}">Back to Thread</a>
+{% endblock %}
