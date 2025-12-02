@@ -66,6 +66,10 @@ def forums():
 
 @bp.route('/thread/<int:thread_id>', methods=['GET', 'POST'])
 def thread(thread_id):
+    image = None # <= Fix: define image early!
+    content = ""    # <-- define content
+    author = "Anonymous"  # <-- define author
+
     db = current_app.get_db()
     forum = db.execute("SELECT * FROM thread WHERE id = ?", (thread_id,)).fetchone()
     posts = db.execute("SELECT * FROM post WHERE thread_id = ?", (thread_id,)).fetchall()
@@ -97,6 +101,15 @@ def thread(thread_id):
         )
         db.commit()
         return redirect(url_for('main.thread', thread_id=thread_id))
+    # <-- Must always return a response here:
+    return render_template(
+        "thread.html",
+        forum=forum,
+        posts=posts,
+        error=error,
+        thread_id=thread_id,
+        categories=CATEGORIES
+    )
 
 
 @bp.route('/delete_post/<int:post_id>/<int:thread_id>')

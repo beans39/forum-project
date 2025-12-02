@@ -1,0 +1,9 @@
+# Ignore Python cache
+__pycache__/
+*.pyc
+
+# Ignore local DB
+forum.db
+
+# Ignore uploads (your test images/etc)
+app/static/uploads/
